@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+
+    <title>Finance Calculator</title>
+  </head>
+  <body>
+      <div class="container">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="summary-tab" data-bs-toggle="tab" href="#summary" role="tab" aria-controls="summary" aria-selected="true">Summary</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="income-tab" data-bs-toggle="tab" href="#income" role="tab" aria-controls="income" aria-selected="false">Income</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="deductions-tab" data-bs-toggle="tab" href="#deductions" role="tab" aria-controls="deductions" aria-selected="false">Deductions</a>
+        </li>
+        <li class="nav-item" role="presentation">
+          <a class="nav-link" id="withholding-tab" data-bs-toggle="tab" href="#withholding" role="tab" aria-controls="withholding" aria-selected="false">Tax Withholding</a>
+        </li>
+      </ul>
+      <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="summary" role="tabpanel" aria-labelledby="summary-tab">
+            <div class="row g-2">
+                <div class="col-md">
+                  <div class="form-floating">
+                    <select class="form-select" id="FilingStatusSelectGrid" aria-label="Floating label select example" oninput="updateFilingStatus()">
+                      <option value="S" selected>Single</option>
+                      <option value="MFJ">Married Filing Jointly or Qualifying Widow(er)</option>
+                      <option value="MFS">Married Filing Separately</option>
+                      <option value="HH">Head of Household</option>
+                    </select>
+                    </select>
+                    <label for="FilingStatusSelect">Filing Status</label>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div class="form-floating">
+                    <select class="form-select" id="StateSelectGrid" aria-label="Floating label select example">
+                      <option selected disabled>Federal</option>
+                    </select>
+                    <label for="StateSelectGrid">State</label>
+                  </div>
+                </div>
+                <div class="col-md">
+                  <div class="form-floating">
+                    <select class="form-select" id="YearSelectGrid" aria-label="Floating label select example">
+                      <option selected disabled>2020</option>
+                    </select>
+                    <label for="YearSelectGrid">Year</label>
+                  </div>
+                </div>
+              </div>
+            <table id="summaryTable" class="table caption-top">
+                    <thead>
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">YTD</th>
+                        <th scope="col">Projected</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Income</th>
+                        <td>Income</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Deductions</th>
+                        <td>Deductions</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Adjusted Income</th>
+                        <td>Adjusted Income</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row" colspan="3">---</th>
+                      </tr>
+                      <tr>
+                        <th scope="row">Tax Obligation</th>
+                        <td>0</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Tax Withheld</th>
+                        <td>0</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Tax Refund (Owed)</th>
+                        <td>0</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Tax Bracket</th>
+                        <td>0</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Tax Rate</th>
+                        <td>0</td>
+                        <td>0</td>
+                      </tr>
+                    </tbody>
+                  </table>
+        </div>
+        <div class="tab-pane fade" id="income" role="tabpanel" aria-labelledby="income-tab" class="container">
+            <div class="row">
+              <label class="col">Rate</label>
+              <label class="col">Pay Period</label>
+              <label class="col">Remaining Periods</label>
+              <label class="col">YTD</label>
+              <label class="col">Projected</label>
+            </div>
+            <div class="row">
+              <input id="incomeRate" type="number" class="col" oninput="calcProjectedIncome()" value="5161.42"/>
+              <select id="incomePeriod" class="form-control col" oninput="calcProjectedIncome()">
+                <option value="12">Monthly</option>
+                <option value="24">Semi-Monthly</option>
+                <option value="26">Biweekly</option>
+                <option value="52">Weekly</option>
+              </select>
+              <input id="incomePeriodRemaining" type="number" class="col" oninput="calcProjectedIncome()" value="12"/>
+              <input id="incomeYTD" type="number" class="col" oninput="calcProjectedIncome()" value="0"/>
+              <input id="incomeProjected" type="number" class="col" disabled/>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="deductions" role="tabpanel" aria-labelledby="deductions-tab" class="container">
+            <div class="row">
+              <label class="col">Rate</label>
+              <label class="col">Pay Period</label>
+              <label class="col">Remaining Periods</label>
+              <label class="col">YTD</label>
+              <label class="col">Projected</label>
+            </div>
+            <div class="row">
+            <input id="deductionRate" type="number" class="col" oninput="calcProjectedDeductions()" value="0"/>
+                <select id="deductionPeriod" class="form-control col" oninput="calcProjectedDeductions()">
+                <option value="12">Monthly</option>
+                <option value="24">Semi-Monthly</option>
+                <option value="26">Biweekly</option>
+                <option value="52">Weekly</option>
+                </select>
+                <input id="deductionPeriodRemaining" type="number" class="col" oninput="calcProjectedDeductions()" value="12"/>
+                <input id="deductionYTD" type="number" class="col" oninput="calcProjectedDeductions()" value="12400"/>
+                <input id="deductionProjected" type="number" class="col" disabled/>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="withholding" role="tabpanel" aria-labelledby="withholding-tab" class="container">
+            <div class="row">
+              <label class="col">Rate</label>
+              <label class="col">Pay Period</label>
+              <label class="col">Remaining Periods</label>
+              <label class="col">YTD</label>
+              <label class="col">Projected</label>
+            </div>
+            <div class = "row">
+                <input id="withholdRate" type="number" class="col" oninput="calcProjectedWithhold()" value="0"/>
+                <select id="withholdPeriod" class="form-control col" oninput="calcProjectedWithhold()">
+                <option value="12">Monthly</option>
+                <option value="24">Semi-Monthly</option>
+                <option value="26">Biweekly</option>
+                <option value="52">Weekly</option>
+                </select>
+                <input id="withholdPeriodRemaining" type="number" class="col" oninput="calcProjectedWithhold()" value="0"/>
+                <input id="withholdYTD" type="number" class="col" oninput="calcProjectedWithhold()" value="0"/>
+                <input id="withholdProjected" type="number" class="col" disabled/>
+            </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    <script src="main.min.js"></script>
+  </body>
+</html>

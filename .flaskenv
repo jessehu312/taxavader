@@ -1,0 +1,2 @@
+FLASK_APP=finance
+FLASK_ENV=development
